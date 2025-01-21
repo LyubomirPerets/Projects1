@@ -1,0 +1,191 @@
+## This program doesn't run as intended, but I believe it shows a basic understanding of the principles of JavaScript in application creation. 
+
+const playerHand = document.getElementById("player-hand");
+const drawButton = document.getElementById("draw-card");
+const attackButton = document.getElementById("attack");
+const gameStatus = document.createElement("div");
+document.body.appendChild(gameStatus);
+
+const suits = ['♠', '♥', '♦', '♣'];
+const ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+let deck = [];
+let playerCards = [];
+let aiCards = [];
+let trumpSuit;
+let attackingCard = null;
+let defendingCard = null;
+let isAttacker = true;
+let gameEnded = false;
+
+// Function to create a deck of cards
+function createDeck() {
+    deck = [];
+    for (let suit of suits) {
+        for (let rank of ranks) {
+            deck.push(rank + suit);
+        }
+    }
+    shuffleDeck(deck);
+    trumpSuit = deck[Math.floor(Math.random() * deck.length)].slice(-1); // Randomly select trump suit
+}
+
+// Function to shuffle the deck
+function shuffleDeck(deck) {
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+}
+
+// Function to draw cards
+function drawCards(num) {
+    for (let i = 0; i < num; i++) {
+        if (deck.length > 0) {
+            const card = deck.pop();
+            if (isAttacker) {
+                playerCards.push(card);
+            } else {
+                aiCards.push(card);
+            }
+        }
+    }
+    updateHand();
+}
+
+// Function to update player's hand display
+function updateHand() {
+    playerHand.innerHTML = '';
+    playerCards.forEach((card, index) => {
+        const cardDiv = document.createElement("div");
+        cardDiv.className = "card";
+        cardDiv.textContent = card;
+        cardDiv.onclick = () => selectCard(index);
+        playerHand.appendChild(cardDiv);
+    });
+    checkGameEnd();
+}
+
+// Function to select a card for attack or defense
+function selectCard(index) {
+    const card = playerCards[index];
+    if (isAttacker) {
+        if (!attackingCard) {
+            attackingCard = card;
+            gameStatus.innerText = `Attacking with ${card}`;
+        } else {
+            gameStatus.innerText = "You can only attack with one card.";
+        }
+    } else {
+        if (!defendingCard) {
+            defendingCard = card;
+            gameStatus.innerText = `Defending with ${card}`;
+            resolveTurn();
+        } else {
+            gameStatus.innerText = "You can only defend with one card.";
+        }
+    }
+}
+
+// Function to resolve the turn
+function resolveTurn() {
+    if (attackingCard && defendingCard) {
+        const isDefended = defend(attackingCard, defendingCard);
+        if (isDefended) {
+            gameStatus.innerText += " Attack defended!";
+            resetTurn();
+        } else {
+            gameStatus.innerText += " Attack successful! You lose your card.";
+            playerCards = playerCards.filter(card => card !== defendingCard);
+            resetTurn();
+        }
+        updateHand();
+    }
+}
+
+// Function to check if the attack is defended
+function defend(attackCard, defendCard) {
+    const attackRank = ranks.indexOf(attackCard.slice(0, -1));
+    const defendRank = ranks.indexOf(defendCard.slice(0, -1));
+    const isTrumpAttack = attackCard.endsWith(trumpSuit);
+    const isTrumpDefense = defendCard.endsWith(trumpSuit);
+
+    if (isTrumpDefense && !isTrumpAttack) {
+        return true; // Trump card beats non-trump card
+    }
+    if (isTrumpAttack && !isTrumpDefense) {
+        return false; // Non-trump card can't beat trump card
+    }
+    return defendRank > attackRank; // Compare ranks otherwise
+}
+
+// Function to reset the turn
+function resetTurn() {
+    attackingCard = null;
+    defendingCard = null;
+    isAttacker = !isAttacker;
+    gameStatus.innerText += " Next player's turn.";
+    if (!isAttacker) {
+        aiTurn();
+    }
+}
+
+// AI turn logic
+function aiTurn() {
+    if (aiCards.length > 0) {
+        const aiCard = aiCards[Math.floor(Math.random() * aiCards.length)];
+        if (!attackingCard) {
+            attackingCard = aiCard;
+            gameStatus.innerText = `AI is attacking with ${aiCard}`;
+        } else {
+            defendingCard = aiCards.find(card => defend(attackingCard, card));
+            if (defendingCard) {
+                gameStatus.innerText += ` AI defends with ${defendingCard}`;
+                resolveTurn();
+            } else {
+                gameStatus.innerText += " AI cannot defend and loses the card.";
+                aiCards = aiCards.filter(card => card !== defendingCard);
+                resetTurn();
+            }
+        }
+    }
+    updateHand();
+}
+
+// Function to check if the game has ended
+function checkGameEnd() {
+    if (playerCards.length === 0) {
+        gameEnded = true;
+        gameStatus.innerText = "You win!";
+    } else if (aiCards.length === 0) {
+        gameEnded = true;
+        gameStatus.innerText = "AI wins!";
+    } else if (deck.length === 0 && isAttacker && attackingCard && !defendingCard) {
+        gameStatus.innerText = "Game ends, no more cards to draw!";
+        gameEnded = true;
+    }
+}
+
+// Event listeners
+drawButton.addEventListener("click", () => {
+    if (!gameEnded) {
+        drawCards(1); // Draw one card
+        gameStatus.innerText = "Card drawn!";
+    }
+});
+
+attackButton.addEventListener("click", () => {
+    if (isAttacker) {
+        gameStatus.innerText = "Click on a card to attack.";
+    } else {
+        gameStatus.innerText = "You are defending. Click on a card.";
+    }
+});
+
+
+// Initialize the game
+createDeck();
+for (let i = 0; i < 6; i++) {
+    drawCards(1);
+}
+drawCards(6); // Draw initial cards for AI
+gameStatus.innerText = `Trump suit is ${trumpSuit}`;
