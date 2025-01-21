@@ -1,0 +1,231 @@
+## Built in my freshman year of High School, very rough around the edges.
+
+# Background
+app.background = 'lightSkyBlue'
+Cloud = Oval(120, 80, 100, 70, fill='white')      
+CloudTwo = Oval(320, 120, 110, 79, fill='white')
+CloudThree = Oval(200, 25, 40, 14, fill='white')
+Sun = Circle(400, 0, 30, fill='gold')
+
+# Enemy Plane
+MiG = Oval(190, 0, 10, 3)
+MiGExplosion = Circle(190, 0, 30, fill='orange')
+MiGExplosion.visible=False
+
+# Runway
+Runway = Rect(-400, 183, 1200, 552, fill='green')
+RunwayTwo = Rect(148, 183, 105, 552)
+RunwayLines = Line(200, 188, 200, 335, fill='white', lineWidth=5, dashes=True)
+
+# Cockpit Start
+Rect(0, 230, 400, 170)
+Circle(200, 200, 215, fill=None, border='black', borderWidth=25)
+
+# Locking System
+Line(140, 140, 140, 230, lineWidth=15)
+Line(260, 140, 260, 230, lineWidth=15)
+Rect(149, 155, 104, 80, fill='lightGrey', opacity=40)
+
+# Radar 
+Rect(140, 260, 120, 120, fill='forestGreen')
+Circle(200, 320, 60, fill=None, border='springGreen')
+Circle(200, 320, 50, fill=None, border='springGreen')
+Circle(200, 320, 40, fill=None, border='springGreen')
+Circle(200, 320, 30, fill=None, border='springGreen')
+Circle(200, 320, 20, fill=None, border='springGreen')
+Circle(200, 320, 10, fill=None, border='springGreen')
+Rect(140, 320, 120, 60)
+Rect(140, 260, 120, 60, fill=None, border='grey', borderWidth=4)
+
+# Mode Switch
+Label('Press T for TWS Mode', 200, 335, size=12, fill='white')
+Label('Press I for IR Signature Scanning', 200, 350, size=12, fill='white')
+Label('Press R for Radar Scanning', 200, 365, size=12, fill='white')
+
+# Altitude Meter
+Line(20, 280, 110, 280, fill='grey', dashes=True, lineWidth=5)
+Line(20, 280, 20, 370, fill='grey', dashes=True, lineWidth=5)
+Line(20, 370, 110, 370, fill='grey', dashes=True, lineWidth=5)
+Line(110, 280, 110, 370, fill='grey', dashes=True, lineWidth=5)
+Rect(30, 290, 70, 70, fill='grey')
+Label('ALTITUDE', 60, 305, size=10, fill='springGreen')
+Line(36, 314, 36, 355, fill='white', lineWidth=2)
+Line(36, 314, 52, 314, fill='white')
+Line(36, 354, 52, 354, fill='white')
+Line(36, 334, 44, 334, fill='white')
+
+# Control Panel
+Rect(300, 280, 70, 70, fill='grey')
+Circle(314, 298, 5, fill='red')
+Line(325, 298, 364, 298, fill='orange', lineWidth=3)
+Line(314, 310, 364, 310, fill='lightGray', lineWidth=3)
+Line(314, 322, 364, 322, fill='lightGray', lineWidth=3)
+Line(314, 334,   364, 334, fill='lightGray', lineWidth=3)
+
+# Mode Switch 2, Function Commands and Key Press Commands
+T = Label('TWS MODE ENGAGED', 200, 220, size=8, fill='red')
+I = Label('IR SIGNATURE FOUND', 200, 220, size=8, fill='red')
+R = Label('TARGET 1 MILE NORTH', 200, 220, size=8, fill='red')
+Rb = Circle(193, 272, 5, fill='springGreen')
+Tr = Label('TRACKING...', 200, 165, size=10, fill='red')
+TrT = Label('LOCKED ON', 200, 165, size=10, fill='red')
+Sq = Rect(180, 180, 20, 20, fill=None, border='red')
+Ra = Label('TARGET FOUND', 200, 165, size=10, fill='red')
+Label(' Hold N to Fire 2 Missiles', 340, 245, fill='white', size=10)
+Label('G to Fire Cannon', 340, 256, fill='white', size=10)
+
+T.visible = True
+I.visible = False
+R.visible = False 
+Rb.visible = False
+Tr.visible = False 
+TrT.visible = False
+Sq.visible = False
+Ra.visible = False
+
+
+def onKeyPress(key):
+    if (key == 't'):
+        T.visible = True
+        I.visible = False
+        R.visible=False
+        Rb.visible=False
+        Tr.visible=False
+        TrT.visible=True
+        Sq.visible=True
+        Ra.visible=False
+        
+        
+    elif (key == 'i'):
+        T.visible = False
+        I.visible = True
+        R.visible=False
+        Rb.visible=False
+        Tr.visible=True
+        TrT.visible=False
+        Sq.visible=False
+        Ra.visible=False
+       
+    elif (key == 'r'):
+        T.visible = False
+        I.visible = False
+        R.visible = True
+        Rb.visible=True
+        Tr.visible=False
+        TrT.visible=False
+        Sq.visible=True
+        Ra.visible=True
+        
+    elif (key == 'f'):
+        T.visible=True
+        I.visible=False
+        R.visible = False
+        Rb.visible=False
+        Tr.visible=False
+        TrT.visible=False
+        Sq.visible=False
+        Ra.visible=False
+        
+    elif (key == 'g'):
+        C.visible=True
+        Fr.visible=False
+        Mm.visible=False
+    elif (key == 'm'):
+        C.visible=False
+        Fr.visible=True
+        Mm.visible=False
+    elif (key == 'n'):
+        C.visible=False
+        Fr.visible=True
+        Mm.visible=True
+        
+
+C = Line(149, 235, 180, 180, fill='yellow', lineWidth=5, dashes=True)        
+Fr = Line(253, 235, 236, 197, fill='grey', lineWidth=6)  
+Mm = Line(149, 235, 161, 191, fill='grey', lineWidth=6)
+Fr.visible=False
+Mm.visible=False
+C.visible=False
+Qe = Label('Press Mouse To Destroy Enemy', 95, 200, size=12, fill='red', bold=True)    
+Qw = Label('USE ARROW KEYS TO STEER', 310, 200, size=12, fill='red', bold=True)
+
+def onKeyHold(keys):
+    if ('n' in keys):
+       Fr.centerY -= 6
+       Mm.centerY -= 6
+       Fr.visible=True
+       Mm.visible=True
+       C.visible=False
+    if ('w' in keys):
+       Speed.value += 5   
+       Cloud.centerY += 3
+       CloudTwo.centerY += 2
+       CloudThree.centerY += 4
+       Sun.centerY += 1
+       MiG.centerY += 2
+       Runway.centerY += 4
+       RunwayTwo.centerY += 4      
+       RunwayLines.centerY +=4
+       MiGExplosion.centerY += 2
+       Qe.centerY += 4.5
+       Qw.centerY +=6
+       
+    if ('s' in keys):
+        Speed.value -= 5
+        Cloud.centerY -= 3
+        CloudTwo.centerY -= 2
+        CloudThree.centerY -= 4
+        Sun.centerY -= 1
+        MiG.centerY -= 2
+        Runway.centerY -= 4
+        RunwayTwo.centerY -= 4      
+        RunwayLines.centerY -=4
+        MiGExplosion.centerY -=2
+        Qe.centerY -= 4.5
+        Qw.centerY -=6
+        
+    if ('d' in keys):
+        Cloud.centerX -= 3
+        CloudTwo.centerX -= 2
+        CloudThree.centerX -= 2
+        Sun.centerX -= 1
+        MiG.centerX -= 2
+        Runway.centerX -= 4
+        RunwayTwo.centerX -= 4      
+        RunwayLines.centerX -=4
+        MiGExplosion.centerX -= 2
+        Qe.centerX -= 4.5
+        Qw.centerX -=6
+        
+        
+    if ('a' in keys):
+        Cloud.centerX += 3
+        CloudTwo.centerX += 2
+        CloudThree.centerX += 2
+        Sun.centerX += 1
+        MiG.centerX += 2
+        Runway.centerX += 4
+        RunwayTwo.centerX += 4      
+        RunwayLines.centerX +=4
+        MiGExplosion.centerX += 2
+        Qe.centerX += 4.5
+        Qw.centerX +=6
+        
+def onKeyRelease(key):
+    if (key == 'g'):
+        C.visible=False
+        Fr.visible= False
+        
+Label('Raise Altitude to 530 and then Fire', 200, 380, size=12, fill='springGreen')
+Label('Press "Run" to Reload Missile', 340, 267, size=9, fill='white')   
+Label('Press Up Arrow to Raise Altitude', 67, 257, size=9, fill='white')
+Speed = Label(50, 71, 333, fill='white', size=10)
+
+def onMousePress (x, y):
+    MiG.visible=False
+    MiGExplosion.visible=True
+    Label('ENEMY SHOT DOWN', 200, 120, size=15, fill='red')
+    
+def onMouseRelease (x, y):
+    MiG.visible=False
+    MiGExplosion.visible=False
