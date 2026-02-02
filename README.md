@@ -7,7 +7,7 @@ A collection of small projects (Python + HTML/CSS/JavaScript) built for learning
 - **Jet Simulator (Python)** — Simulation project
 - **Meal Price Calculator (Python)** — Calculates total meal cost
 - **Rock Paper Scissors (Python)** — Game vs computer
-- **BlackJack (Java)** - Player vs Computer
+- **BlackJack (Java)** - Player vs Computer **INSIDE THE "SRC" FOLDER**
 
 ## How to use this repo
 Open any project folder and follow its `README.md` for setup/run instructions.
