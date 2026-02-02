@@ -1,0 +1,13 @@
+'''
+   This program accepts three values that represent cost of order, tip percentage, and tax percentage.
+   It uses these values to calculate and display the final purchase cost/price.
+'''
+order = float(input("Enter the Cost of Your Order: "))
+tips = float(input("Enter Your Tip %: "))
+tax = float(input("Enter Your Tax %: "))
+
+tips1 = order * (tips/100)
+tax1 = order * (tax/100)
+total = tips1 + tax1 + order
+resRound = round(total, 2) #used w3 schools to figure out round command
+print(resRound)
